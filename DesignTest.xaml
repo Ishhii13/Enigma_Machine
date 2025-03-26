@@ -1,0 +1,124 @@
+﻿<Page x:Class="Enigma_Machine.DesignTest"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Enigma_Machine"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="DesignTest">
+
+    <Page.Resources>
+        <Style x:Key="CircleBorderWithLetter" TargetType="Border">
+            <Setter Property="Width" Value="50"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Background" Value="DarkGray"/>
+            <Setter Property="CornerRadius" Value="50"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="3"/>
+        </Style>
+
+        <Style x:Key="Letter" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="GhostWhite"/>
+        </Style>
+    </Page.Resources>
+    
+    <Grid Background="White">
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,50,0,-50">
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="Q"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="W"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="E"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="R"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="T"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="Y"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="U"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="I"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="O"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="P"/>
+            </Border>
+        </StackPanel>
+
+        <!-- Second Row -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,104,0,-104">
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="A"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="S"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="D"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="F"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="G"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="H"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="J"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="K"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="L"/>
+            </Border>
+        </StackPanel>
+
+        <!-- Third Row -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,160,0,-160">
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="Z"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="X"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="C"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="V"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="B"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="N"/>
+            </Border>
+            <Border Style="{StaticResource CircleBorderWithLetter}">
+                <TextBlock Style="{StaticResource Letter}" Text="M"/>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Page>

@@ -6,33 +6,176 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Enigma_Machine"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" SizeToContent="WidthAndHeight" KeyDown="Window_KeyDown">
-    <Grid>
-        <Rectangle HorizontalAlignment="Left" Width="10" Height="10" Margin="790,425,0,0" Stroke="Black" VerticalAlignment="Top" Opacity="0"/>
-        <Label Content="Control" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"/>
-        <Label Content="Ring 3 (H)" HorizontalAlignment="Left" Margin="10,61,0,0" VerticalAlignment="Top"/>
-        <Label Content="Ring 2 (M)" HorizontalAlignment="Left" Margin="10,92,0,0" VerticalAlignment="Top"/>
-        <Label Content="Ring 1 (S)" HorizontalAlignment="Left" Margin="10,123,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblControlRing" Content="Label" HorizontalAlignment="Left" Margin="80,30,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblRing1" Content="Label" HorizontalAlignment="Left" Margin="80,61,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblRing2" Content="Label" HorizontalAlignment="Left" Margin="80,92,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblRing3" Content="Label" HorizontalAlignment="Left" Margin="80,123,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblInput" Content="Input" HorizontalAlignment="Left" Margin="10,199,0,0" VerticalAlignment="Top" FontFamily="Courier New"/>
-        <Label x:Name="lblEncrpyt" Content="Encrypt" HorizontalAlignment="Left" Margin="10,259,0,0" VerticalAlignment="Top" FontFamily="Courier New"/>
-        <Label x:Name="lblEncrpytMirror" Content="Mirror" HorizontalAlignment="Left" Margin="10,319,0,0" VerticalAlignment="Top" FontFamily="Courier New"/>
-        <Button x:Name="btnRotor"  Content="Rotor On" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Click="btnRotor_Click"/>
-        <TextBox x:Name="txtBRing1Init" HorizontalAlignment="Left" Margin="142,11,0,0" TextWrapping="Wrap" Text="0 - 25" VerticalAlignment="Top" Width="41" Height="18" GotFocus="txtBRing1Init_GotFocus" HorizontalContentAlignment="Center"/>
-        <TextBox x:Name="txtBRing2Init" HorizontalAlignment="Left" Margin="214,11,0,0" TextWrapping="Wrap" Text="0 - 25" VerticalAlignment="Top" Width="41" GotFocus="txtBRing2Init_GotFocus" HorizontalContentAlignment="Center"/>
-        <TextBox x:Name="txtBRing3Init" HorizontalAlignment="Left" Margin="281,11,0,0" TextWrapping="Wrap" Text="0 -25" VerticalAlignment="Top" Width="41" Height="18" GotFocus="txtBRing3Init_GotFocus" HorizontalContentAlignment="Center"/>
-        <Label Content="H" HorizontalAlignment="Left" Margin="118,7,0,0" VerticalAlignment="Top"/>
-        <Label Content="M" HorizontalAlignment="Left" Margin="188,7,0,0" VerticalAlignment="Top"/>
-        <Label Content="S" HorizontalAlignment="Left" Margin="260,7,0,0" VerticalAlignment="Top"/>
+        Title="MainWindow" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Height="650" Width="800" SizeToContent="WidthAndHeight" KeyDown="Window_KeyDown">
 
-        <Label Content="Input Message:" HorizontalAlignment="Left" Margin="10,168,0,0" VerticalAlignment="Top"/>
-        <Label Content="Encrypted Message:" HorizontalAlignment="Left" Margin="10,228,0,0" VerticalAlignment="Top"/>
-        <Label Content="Encrypted Message with Mirroring:" HorizontalAlignment="Left" Margin="10,288,0,0" VerticalAlignment="Top"/>
-        <Label Content="Plugboard (AB CD EF):" HorizontalAlignment="Left" Margin="10,350,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtPlugboard" HorizontalAlignment="Left" Margin="150,350,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" TextChanged="txtPlugboard_TextChanged"/>
-        <Button x:Name="btnSetPlugboard" Content="Set Plugboard" HorizontalAlignment="Left" Margin="360,350,0,0" VerticalAlignment="Top" Click="btnSetPlugboard_Click"/>
+    <Window.Resources>
+        <Style x:Key="CircleBorderWithLetter" TargetType="Border">
+            <Setter Property="Width" Value="75"/>
+            <Setter Property="Height" Value="75"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Background" Value="DarkGray"/>
+            <Setter Property="CornerRadius" Value="50"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="3"/>
+        </Style>
+
+        <Style x:Key="Letter" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="GhostWhite"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Background="SandyBrown">
+        <Rectangle HorizontalAlignment="Center" Height="650" Stroke="Transparent" VerticalAlignment="Center" Width="800"/>
+
+        <Grid Margin="0,0,0,253" Visibility="Visible">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="500"/>
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+
+            <Rectangle HorizontalAlignment="Left" Width="10" Height="10" Margin="790,425,0,0" Stroke="Black" VerticalAlignment="Top" Opacity="0"/>
+            <Label x:Name="lblRing1" Foreground="Transparent" Content="Label" HorizontalAlignment="Left" Margin="80,61,0,0" VerticalAlignment="Top" Width="30"/>
+            <Label x:Name="lblRing2" Foreground="Transparent" Content="Label" HorizontalAlignment="Left" Margin="80,92,0,0" VerticalAlignment="Top" Width="30"/>
+            <Label x:Name="lblRing3" Foreground="Transparent" Content="Label" HorizontalAlignment="Left" Margin="80,123,0,0" VerticalAlignment="Top" Width="30"/>
+            <ScrollViewer VerticalAlignment="Top" Grid.Column="1" Margin="10,40,10,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Height="70">
+                <TextBlock TextWrapping="Wrap" Grid.Column="1" x:Name="lblInput" Text="Input" FontFamily="Courier New" Width="280"/>
+            </ScrollViewer>
+            <ScrollViewer VerticalAlignment="Top" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Height="70" Margin="10,136,10,0">
+                <TextBlock TextWrapping="Wrap" Grid.Column="1" x:Name="lblEncrpyt" Text="Encrypt" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Courier New"/>
+            </ScrollViewer>
+            <ScrollViewer VerticalAlignment="Top" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Height="70" Margin="10,238,10,0">
+                <TextBlock TextWrapping="Wrap" Grid.Column="1" x:Name="lblEncrpytMirror" Text="Mirror" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Courier New"/>
+            </ScrollViewer>
+
+            <Label Grid.Column="1" Content="Input Message:" HorizontalAlignment="Left" Margin="10,17,0,0" VerticalAlignment="Top"/>
+            <Label Grid.Column="1" Content="Encrypted Message:" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top"/>
+            <Label Grid.Column="1" Content="Encrypted Message with Mirroring:" HorizontalAlignment="Left" Margin="10,212,0,0" VerticalAlignment="Top"/>
+            <Canvas Background="SaddleBrown">
+                <Grid x:Name="RingGrid" Background="SaddleBrown" Width="322" HorizontalAlignment="Left" Height="226" Canvas.Left="89" Canvas.Top="48" VerticalAlignment="Top">
+                    <StackPanel x:Name="Ring1" Background="SaddleBrown" Margin="111,36,161,10" Width="50" Height="180"/>
+                    <StackPanel x:Name="Ring2" Background="SaddleBrown" Margin="182,36,90,10" Width="50" Height="180"/>
+                    <StackPanel x:Name="Ring3" Background="SaddleBrown" Margin="249,36,23,10" Width="50" Height="180"/>
+                    <Label FontWeight="Bold" FontSize="30" Content="R" HorizontalAlignment="Left" Margin="27,-7,0,0" VerticalAlignment="Top"/>
+                    <Label FontWeight="Bold" FontSize="30" Content="3" HorizontalAlignment="Left" Margin="122,-7,0,0" VerticalAlignment="Top"/>
+                    <Label FontWeight="Bold" FontSize="30" Content="2" HorizontalAlignment="Left" Margin="193,-7,0,0" VerticalAlignment="Top"/>
+                    <Label FontWeight="Bold" FontSize="30" Content="1" HorizontalAlignment="Left" Margin="260,-7,0,0" VerticalAlignment="Top"/>
+                    <Border Margin="22,103,260,83" Background="Gray" CornerRadius="6" Width="40" Height="40">
+                        <TextBlock x:Name="Reflector" FontWeight="Bold" FontSize="26" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Y" VerticalAlignment="Top" Foreground="White"/>
+                    </Border>
+                </Grid>
+
+                <Button x:Name="btnRotor"  Content="Rotor On" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btnRotor_Click" Canvas.Left="106" Canvas.Top="281"/>
+                <TextBox x:Name="txtBRing1Init" TextChanged="LimitNumbers" PreviewTextInput="NumbersOnly" HorizontalAlignment="Left" Margin="205,281,0,0" TextWrapping="Wrap" Text="0 - 25" VerticalAlignment="Top" Width="41" Height="18" GotFocus="txtBRing1Init_GotFocus" HorizontalContentAlignment="Center"/>
+                <TextBox x:Name="txtBRing2Init" TextChanged="LimitNumbers" PreviewTextInput="NumbersOnly" HorizontalAlignment="Left" Margin="277,281,0,0" TextWrapping="Wrap" Text="0 - 25" VerticalAlignment="Top" Width="41" GotFocus="txtBRing2Init_GotFocus" HorizontalContentAlignment="Center"/>
+                <TextBox x:Name="txtBRing3Init" TextChanged="LimitNumbers" PreviewTextInput="NumbersOnly" HorizontalAlignment="Left" Margin="344,281,0,0" TextWrapping="Wrap" Text="0 -25" VerticalAlignment="Top" Width="41" Height="18" GotFocus="txtBRing3Init_GotFocus" HorizontalContentAlignment="Center"/>
+                <Label Content="H" HorizontalAlignment="Left" Margin="187,277,0,0" VerticalAlignment="Top"/>
+                <Label Content="M" HorizontalAlignment="Left" Margin="255,277,0,0" VerticalAlignment="Top"/>
+                <Label Content="S" HorizontalAlignment="Left" Margin="327,277,0,0" VerticalAlignment="Top"/>
+
+                <Label Content="Plugboard (AB CD EF):" HorizontalAlignment="Left" Margin="10,350,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="txtPlugboard" HorizontalAlignment="Left" Margin="150,350,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" TextChanged="txtPlugboard_TextChanged"/>
+                <Button x:Name="btnSetPlugboard" Content="Set Plugboard" HorizontalAlignment="Left" Margin="360,350,0,0" VerticalAlignment="Top" Click="btnSetPlugboard_Click"/>
+            </Canvas>
+        </Grid>
+
+        <!--Plugboard-->
+        <Grid Background="#FF545454" Margin="0,381,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,-11,0,140">
+                <Border x:Name="Q" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="Q"/>
+                </Border>
+                <Border x:Name="W" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="W"/>
+                </Border>
+                <Border x:Name="E" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="E"/>
+                </Border>
+                <Border x:Name="R" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="R"/>
+                </Border>
+                <Border x:Name="T" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="T"/>
+                </Border>
+                <Border x:Name="Y" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="Y"/>
+                </Border>
+                <Border x:Name="U" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="U"/>
+                </Border>
+                <Border x:Name="I" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="I"/>
+                </Border>
+                <Border x:Name="O" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="O"/>
+                </Border>
+                <Border x:Name="P" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="P"/>
+                </Border>
+            </StackPanel>
+
+            <!-- Second Row -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,-2,0,2">
+                <Border x:Name="A" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="A"/>
+                </Border>
+                <Border x:Name="S" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="S"/>
+                </Border>
+                <Border x:Name="D" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="D"/>
+                </Border>
+                <Border x:Name="F" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="F"/>
+                </Border>
+                <Border x:Name="G" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="G"/>
+                </Border>
+                <Border x:Name="H" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="H"/>
+                </Border>
+                <Border x:Name="J" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="J"/>
+                </Border>
+                <Border x:Name="K" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="K"/>
+                </Border>
+                <Border x:Name="L" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="L"/>
+                </Border>
+            </StackPanel>
+
+            <!-- Third Row -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,76,0,-76">
+                <Border x:Name="Z" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="Z"/>
+                </Border>
+                <Border x:Name="X" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="X"/>
+                </Border>
+                <Border x:Name="C" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="C"/>
+                </Border>
+                <Border x:Name="V" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="V"/>
+                </Border>
+                <Border x:Name="B" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="B"/>
+                </Border>
+                <Border x:Name="N" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="N"/>
+                </Border>
+                <Border x:Name="M" Style="{StaticResource CircleBorderWithLetter}">
+                    <TextBlock Style="{StaticResource Letter}" Text="M"/>
+                </Border>
+            </StackPanel>
+        </Grid>
+
+
     </Grid>
 </Window>

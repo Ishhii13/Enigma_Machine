@@ -1,4 +1,5 @@
 ﻿using System.Net.NetworkInformation;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -42,6 +43,11 @@ namespace Enigma_Machine
 
             SetDefaults(); // Initialize default values
 
+            string[] rings = { _ring1, _ring2, _ring3 };
+            StackPanel[] ringPanels = { Ring1, Ring2, Ring3 };
+            DisplayRotor(rings, ringPanels);
+            //DisplayReflector();
+
             _rotor = false; // Initially rotor is off
             btnRotor.Content = "Rotor On"; // Set button text
             btnRotor.IsEnabled = false; // Disable rotor button until plugboard is set
@@ -74,43 +80,52 @@ namespace Enigma_Machine
         // Handle keyboard input
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            // Check for uppercase letters and message length
-            if (e.Key.ToString().Length == 1 && lblInput.Content.ToString().Length < 128)
+            if (_plugboardSet) //only if the pluboard is set already
             {
-                if ((int)e.Key.ToString()[0] >= 65 && (int)e.Key.ToString()[0] <= 90)
+                // Check for uppercase letters and message length
+                //if (e.Key.ToString().Length == 1 && lblInput.Text.ToString().Length < 128)
+                if (e.Key.ToString().Length == 1)
                 {
-                    lblInput.Content += e.Key.ToString(); // Append input character
-                    lblEncrpyt.Content += Encrypt(e.Key.ToString()[0]) + ""; // Encrypt and append
-                    lblEncrpytMirror.Content += Mirror(e.Key.ToString()[0]) + ""; // Mirror and append
-
-                    // Rotate rotors if enabled
-                    if (_rotor)
+                    if ((int)e.Key.ToString()[0] >= 65 && (int)e.Key.ToString()[0] <= 90)
                     {
-                        Rotate(true);
-                        DisplayRing(lblRing1, _ring1); // Update rotor display
-                        DisplayRing(lblRing2, _ring2);
-                        DisplayRing(lblRing3, _ring3);
+                        lblInput.Text += e.Key.ToString(); // Append input character
+                        lblEncrpyt.Text += Encrypt(e.Key.ToString()[0]) + ""; // Encrypt and append
+                        lblEncrpytMirror.Text += Mirror(e.Key.ToString()[0]) + ""; // Mirror and append
+
+                        LightUpKey();
+                        TurnRotor();
+
+                        // Rotate rotors if enabled
+                        if (_rotor)
+                        {
+                            Rotate(true);
+                            DisplayRing(lblRing1, _ring1); // Update rotor display
+                            DisplayRing(lblRing2, _ring2);
+                            DisplayRing(lblRing3, _ring3);
+                        }
                     }
                 }
-            }
-            // Handle space key
-            else if (e.Key == Key.Space)
-            {
-                lblInput.Content += " ";
-                lblEncrpyt.Content += " ";
-                lblEncrpytMirror.Content += " ";
-            }
-            // Handle backspace key
-            else if (e.Key == Key.Back)
-            {
-                Rotate(false); // Rotate rotors backward
-                DisplayRing(lblRing1, _ring1);
-                DisplayRing(lblRing2, _ring2);
-                DisplayRing(lblRing3, _ring3);
+                // Handle space key
+                else if (e.Key == Key.Space)
+                {
+                    lblInput.Text += " ";
+                    lblEncrpyt.Text += " ";
+                    lblEncrpytMirror.Text += " ";
+                    TurnRotor();
+                }
+                // Handle backspace key
+                else if (e.Key == Key.Back)
+                {
+                    Rotate(false); // Rotate rotors backward
+                    DisplayRing(lblRing1, _ring1);
+                    DisplayRing(lblRing2, _ring2);
+                    DisplayRing(lblRing3, _ring3);
 
-                lblInput.Content = RemoveLastLetter(lblInput.Content.ToString()); // Remove last character
-                lblEncrpyt.Content = RemoveLastLetter(lblEncrpyt.Content.ToString());
-                lblEncrpytMirror.Content = RemoveLastLetter(lblEncrpytMirror.Content.ToString());
+                    lblInput.Text = RemoveLastLetter(lblInput.Text.ToString()); // Remove last character
+                    lblEncrpyt.Text = RemoveLastLetter(lblEncrpyt.Text.ToString());
+                    lblEncrpytMirror.Text = RemoveLastLetter(lblEncrpytMirror.Text.ToString());
+                    TurnRotor();
+                }
             }
         }
 
@@ -132,6 +147,7 @@ namespace Enigma_Machine
 
             // Reflector pass
             newChar = _reflector[IndexSearch(_control, newChar)];
+            Reflector.Text = newChar.ToString();
 
             // Rotor pass backward
             newChar = _ring3[IndexSearch(_control, newChar)];
@@ -168,11 +184,11 @@ namespace Enigma_Machine
             _ring3 = "UQNTLSZFMREHDPXKIBVYGJCWOA";
             _keyOffset = new int[] { 0, 0, 0 };
 
-            lblInput.Content = "";
-            lblEncrpyt.Content = "";
-            lblEncrpytMirror.Content = "";
+            lblInput.Text = "";
+            lblEncrpyt.Text = "";
+            lblEncrpytMirror.Text = "";
 
-            DisplayRing(lblControlRing, _control);
+            //DisplayRing(lblControlRing, _control);
             DisplayRing(lblRing1, _ring1);
             DisplayRing(lblRing2, _ring2);
             DisplayRing(lblRing3, _ring3);
@@ -279,6 +295,8 @@ namespace Enigma_Machine
                     DisplayOffset();
                 }
             }
+
+            TurnRotor();
         }
 
         // Initialize rotors with initial offset
@@ -341,6 +359,9 @@ namespace Enigma_Machine
 
         private bool InPlugboardFormat()
         {
+            if (txtPlugboard.Text.Length > 29)
+                return false; //only 10 cables
+
             for (int i = 0; i < txtPlugboard.Text.Length; i++)
             {
                 if (i % 3 == 2 && txtPlugboard.Text[i] != ' ') //check for spaces on the 3rd char
@@ -382,9 +403,108 @@ namespace Enigma_Machine
         // Handle plugboard text change
         private void txtPlugboard_TextChanged(object sender, TextChangedEventArgs e)
         {
-            lblInput.Content = "";
-            lblEncrpyt.Content = "";
-            lblEncrpytMirror.Content = "";
+            lblInput.Text = "";
+            lblEncrpyt.Text = "";
+            lblEncrpytMirror.Text = "";
+        }
+
+        //code for the plugboard
+        private async void LightUpKey()
+        {
+            if (!string.IsNullOrEmpty(lblEncrpyt.Text.ToString()))
+            {
+                string encrypt = lblEncrpyt.Text.ToString();
+                char lastKey = encrypt[encrypt.Length - 1]; //last character only
+
+                Border lampButton = FindName(lastKey.ToString()) as Border;
+
+                if (lampButton != null)
+                {
+                    lampButton.Background = Brushes.LightYellow; // light color
+                    await Task.Delay(250); // 1/4 second
+                    lampButton.Background = Brushes.DarkGray; // default color
+                }
+            }
+        }
+
+        private void TurnRotor() //it works???
+        {
+            Ring1.Children.Clear();
+            Ring2.Children.Clear();
+            Ring3.Children.Clear();
+
+            //string[] rings = { lblRing1.Content.ToString(), lblRing2.Content.ToString(), lblRing3.Content.ToString() };
+            string[] rings = { _ring1, _ring2, _ring3 };
+            StackPanel[] ringPanels = { Ring1, Ring2, Ring3 };
+
+            DisplayRotor(rings, ringPanels);
+        }
+
+        private void DisplayRotor(string[] rings, StackPanel[] ringPanels)
+        {
+
+            for (int r = 0; r < 3; r++) //rings 1-3
+            {
+                for (int i = -2; i <= 2; i++)
+                {
+                    bool middle = false;
+
+                    if (i == 0)
+                        middle = true;
+
+                    Border border = new Border
+                    {
+                        VerticalAlignment = VerticalAlignment.Top,
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        Background = Brushes.Gray,
+                        CornerRadius = middle ? new CornerRadius(6) : new CornerRadius(3),
+                        Height = middle ? 40 : 30,
+                        Width = middle ? 40 : 30,
+                        Margin = new Thickness(0, 2, 0, 1)
+                    };
+
+                    string txt = rings[r][(rings[r].Length + i) % rings[r].Length].ToString();
+
+                    //MessageBox.Show(rings[0]);
+
+                    //skip spaces
+                    while (txt == " ")
+                    {
+                        txt = rings[r][(rings[r].Length + i + 1) % rings[r].Length].ToString();
+                    }
+
+                    TextBlock textBlock = new TextBlock
+                    {
+                        Text = txt,
+                        Foreground = Brushes.White,
+                        FontWeight = FontWeights.Bold,
+                        FontSize = middle ? 20 : 16,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        HorizontalAlignment = HorizontalAlignment.Center
+                    };
+
+                    border.Child = textBlock;
+
+                    ringPanels[r].Children.Add(border);
+                }
+            }
+        }
+
+        private void NumbersOnly(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !int.TryParse(e.Text, out _); //numbers only
+        }
+
+        private void LimitNumbers(object sender, RoutedEventArgs e) //text change event for the textboxes
+        {
+            if (sender is TextBox textBox && int.TryParse(textBox.Text, out int num))
+            {
+                if (num > 25)
+                {
+                    textBox.Text = "25";
+                    textBox.CaretIndex = textBox.Text.Length; // Move cursor to the end
+                }
+            }
         }
     }
 }
